@@ -1,32 +1,17 @@
-const { createUserWithEmailAndPassword } = require('firebase/auth');
-const { auth } = require('../database');
+const { auth } = require('../firebase');
 
 module.exports = {
   async signUp(req, res) {
     const { email, password } = req.body;
 
     try {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      const { uid, metadata, tokensValidAfterTime } = await auth.createUser({ email, password });
 
-      const uid = user.uid;
-      const { refreshToken, accessToken, expirationTime } = user.stsTokenManager;
-      const { createdAt, lastLoginAt } = user.metadata;
+      const user = { uid, email, metadata, tokensValidAfterTime };
 
-      const data = {
-        uid,
-        email,
-        createdAt,
-        lastLoginAt,
-        expirationTime,
-        tokens: {
-          refreshToken,
-          accessToken,
-        },
-      };
-
-      res.status(201).json(data);
+      return res.status(201).json(user);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      return res.status(400).json(error);
     }
   },
 };
