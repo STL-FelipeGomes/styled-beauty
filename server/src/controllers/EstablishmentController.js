@@ -33,6 +33,11 @@ module.exports = {
 
     const estabRef = db.collection('establishments').doc(id);
     const estabSnapshot = await estabRef.get();
+    const estabData = estabSnapshot.data();
+
+    if (!estabData) {
+      return res.status(404).json({ error: { message: 'Establishment not found.' } });
+    }
 
     const estabOwnerRef = db.collection('establishmentOwners');
     const estabOwnerSnapshot = await estabOwnerRef.where('establishmentId', '==', id).get();
@@ -43,7 +48,7 @@ module.exports = {
       ownerIds.push(ownerId);
     });
 
-    return res.json({ id, ...estabSnapshot.data(), ownerIds });
+    return res.json({ id, ...estabData, ownerIds });
   },
   async list(req, res) {
     const { user_id } = req.params;
@@ -120,5 +125,35 @@ module.exports = {
     await db.collection('establishmentOwners').add(newEstabOwner);
 
     return res.status(201).json({ id, ...newEstab, ownerIds: [user_id] });
+  },
+  async update(req, res) {
+    const { name, logo, address, images, categoryIds, serviceIds } = req.body;
+    const { id } = req.params;
+
+    const estabRef = db.collection('establishments').doc(id);
+    const estabSnapshot = await estabRef.get();
+    const estabData = estabSnapshot.data();
+
+    if (!estabData) {
+      return res.status(404).json({ error: { message: 'Establishment not found.' } });
+    }
+
+    const updatedEstab = {
+      ...estabData,
+      name: name ?? estabData.name,
+      logo: logo ?? estabData.logo,
+      address: address ?? estabData.address,
+      images: images ?? estabData.images,
+      categoryIds: categoryIds ?? estabData.categoryIds,
+      serviceIds: serviceIds ?? estabData.serviceIds,
+    };
+
+    try {
+      await estabRef.update(updatedEstab);
+    } catch (error) {
+      return res.status(400).json({ error });
+    }
+
+    return res.json(updatedEstab);
   },
 };

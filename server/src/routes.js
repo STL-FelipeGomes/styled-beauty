@@ -8,6 +8,7 @@ router.post('/users/signup', UserController.signUp);
 
 router.get('/establishments', EstablishmentController.index);
 router.get('/establishments/:id', EstablishmentController.show);
+router.put('/establishments/:id', EstablishmentController.update);
 
 router.get('/users/:user_id/establishments', EstablishmentController.list);
 router.post('/users/:user_id/establishments', EstablishmentController.store);
