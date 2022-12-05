@@ -9,7 +9,7 @@ module.exports = {
     const estabOwnerSnapshot = await estabOwnerRef.get();
 
     const estabs = [];
-    estabSnapshot.forEach(async(estab) => {
+    estabSnapshot.forEach((estab) => {
       estabs.push({ id: estab.id, ...estab.data() });
     });
 
@@ -44,6 +44,37 @@ module.exports = {
     });
 
     return res.json({ id, ...estabSnapshot.data(), ownerIds });
+  },
+  async list(req, res) {
+    const { user_id } = req.params;
+
+    const estabRef = db.collection('establishments');
+    const estabSnapshot = await estabRef.get();
+
+    const estabOwnerRef = db.collection('establishmentOwners');
+    const estabOwnerSnapshot = await estabOwnerRef.where('ownerId', '==', user_id).get();
+
+    const estabs = [];
+    estabSnapshot.forEach((estab) => {
+      estabs.push({ id: estab.id, ...estab.data() });
+    });
+
+    const estabOwners = [];
+    estabOwnerSnapshot.forEach((estabOwner) => {
+      estabOwners.push({ ...estabOwner.data() });
+    });
+
+    const filterdEstabs = estabs
+      .map((estab) => {
+        const ownerIds = estabOwners
+          .map(({ establishmentId, ownerId }) => establishmentId === estab.id ? ownerId : null)
+          .filter((ownerId) => ownerId);
+
+        return { ...estab, ownerIds };
+      })
+      .filter((estab) => estab.ownerIds.length);
+
+    return res.json(filterdEstabs);
   },
   async store(req, res) {
     const { name, address, logo } = req.body;
