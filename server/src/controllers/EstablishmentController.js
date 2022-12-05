@@ -33,9 +33,8 @@ module.exports = {
 
     const estabRef = db.collection('establishments').doc(id);
     const estabSnapshot = await estabRef.get();
-    const estabData = estabSnapshot.data();
 
-    if (!estabData) {
+    if (!estabSnapshot.exists) {
       return res.status(404).json({ error: { message: 'Establishment not found.' } });
     }
 
@@ -48,7 +47,7 @@ module.exports = {
       ownerIds.push(ownerId);
     });
 
-    return res.json({ id, ...estabData, ownerIds });
+    return res.json({ id, ...estabSnapshot.data(), ownerIds });
   },
   async list(req, res) {
     const { user_id } = req.params;
@@ -132,11 +131,12 @@ module.exports = {
 
     const estabRef = db.collection('establishments').doc(id);
     const estabSnapshot = await estabRef.get();
-    const estabData = estabSnapshot.data();
 
-    if (!estabData) {
+    if (!estabSnapshot.exists) {
       return res.status(404).json({ error: { message: 'Establishment not found.' } });
     }
+
+    const estabData = estabSnapshot.data();
 
     const updatedEstab = {
       ...estabData,
@@ -155,5 +155,22 @@ module.exports = {
     }
 
     return res.json(updatedEstab);
+  },
+  async destroy(req, res) {
+    const { id } = req.params;
+
+    const estabRef = db.collection('establishments').doc(id);
+    const estabSnapshot = await estabRef.get();
+
+    if (!estabSnapshot.exists) {
+      return res.status(404).json({ error: { message: 'Establishment not found.' } });
+    }
+
+    try {
+      await estabRef.delete();
+      return res.status(204).json();
+    } catch (error) {
+      return res.status(400).json({ error });
+    }
   },
 };
