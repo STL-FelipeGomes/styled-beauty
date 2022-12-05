@@ -15,18 +15,35 @@ module.exports = {
 
     const estabOwners = [];
     estabOwnerSnapshot.forEach((estabOwner) => {
-      estabOwners.push({ id: estabOwner.id, ...estabOwner.data() });
+      estabOwners.push({ ...estabOwner.data() });
     });
 
     const filterdEstabs = estabs.map((estab) => {
       const ownerIds = estabOwners
-        .map((estabOwner) => estabOwner.establishmentId === estab.id ? estabOwner.ownerId : null)
+        .map(({ establishmentId, ownerId }) => establishmentId === estab.id ? ownerId : null)
         .filter((ownerId) => ownerId);
 
       return { ...estab, ownerIds };
     });
 
     return res.json(filterdEstabs);
+  },
+  async show(req, res) {
+    const { id } = req.params;
+
+    const estabRef = db.collection('establishments').doc(id);
+    const estabSnapshot = await estabRef.get();
+
+    const estabOwnerRef = db.collection('establishmentOwners');
+    const estabOwnerSnapshot = await estabOwnerRef.where('establishmentId', '==', id).get();
+
+    const ownerIds = [];
+    estabOwnerSnapshot.forEach((estabOwner) => {
+      const { ownerId } = estabOwner.data();
+      ownerIds.push(ownerId);
+    });
+
+    return res.json({ id, ...estabSnapshot.data(), ownerIds });
   },
   async store(req, res) {
     const { name, address, logo } = req.body;
