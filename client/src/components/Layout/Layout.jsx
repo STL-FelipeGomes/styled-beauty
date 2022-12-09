@@ -11,7 +11,6 @@ const Layout = ({ ...props }) => {
       height={props.height}
       gap={props.gap}
     >
-      {console.log(props)}
       {props.children}
     </Box>
   );

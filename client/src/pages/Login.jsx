@@ -22,7 +22,7 @@ const Login = () => {
             padding="0.5rem 2rem"
             borderRadius="1rem"
             background="blackX.400"
-            border="2px solid #0F241D"
+            border="1px solid #0F241D"
             focusBorderColor="red"
             _focus={{
               background: "whiteX.700",
@@ -36,7 +36,7 @@ const Login = () => {
             padding="0.5rem 2rem"
             borderRadius="1rem"
             background="blackX.400"
-            border="2px solid #0F241D"
+            border="1px solid #0F241D"
             _focus={{
               background: "whiteX.700",
             }}
@@ -56,16 +56,20 @@ const Login = () => {
       </Box>
       <Button
         background="greenX.700"
-        borderRadius="5px"
+        borderRadius="15px"
         paddingY="0.5rem"
         width="15.6rem"
         fontWeight="500"
         color="whiteX.600"
         _hover={{ background: "greenX.600" }}
         transition="0.3s"
+        onClick={() => (window.location.href = "/casa")}
       >
         Entrar
       </Button>
+      <Link href="/" color="blackX.500">
+        Cadastrar-se
+      </Link>
       <Link href="/" color="blackX.500">
         Esqueci minha senha
       </Link>
