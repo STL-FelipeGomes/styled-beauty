@@ -1,3 +1,4 @@
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import {
   Box,
   Button,
@@ -12,6 +13,7 @@ import { FaUserCircle } from 'react-icons/fa';
 import { createRef, useState } from 'react';
 import Layout from '../../components/Layout/Layout';
 import Input from '../../components/Input/Input';
+import auth from '../../database';
 
 const RegisterUser = () => {
   const [show, setShow] = useState(false);
@@ -23,7 +25,7 @@ const RegisterUser = () => {
   const passwordRef = createRef();
   const passwordConfirmationRef = createRef();
 
-  const registerUser = () => {
+  const registerUser = async () => {
     const { value: name } = nameRef.current;
     const { value: date } = dateRef.current;
     const { value: email } = emailRef.current;
@@ -39,7 +41,8 @@ const RegisterUser = () => {
       password &&
       passwordConfirmation
     ) {
-      console.log('permitiu');
+      const user = await createUserWithEmailAndPassword(auth, email, password);
+      console.log('>>>>>> user', user);
     }
   };
 
