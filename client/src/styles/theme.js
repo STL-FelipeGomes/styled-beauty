@@ -1,4 +1,6 @@
-export default {
+import { extendTheme } from '@chakra-ui/react';
+
+export default extendTheme({
   colors: {
     whiteX: {
       700: '#FFFFFF',
@@ -14,6 +16,9 @@ export default {
       700: '#49B88D',
       600: '#40A07B',
     },
+    orangeX: {
+      700: '#FF843F',
+    },
   },
   fonts: {
     heading: 'Poppins, Dm Sans, sans-serif',
@@ -27,4 +32,4 @@ export default {
       },
     },
   },
-};
+});

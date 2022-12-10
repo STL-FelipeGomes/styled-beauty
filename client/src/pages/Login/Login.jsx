@@ -7,8 +7,7 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { createRef, useState } from 'react';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { FaUserCircle } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import Layout from '../../components/Layout/Layout';
@@ -46,7 +45,7 @@ const Login = () => {
           gap="1rem"
         >
           <Box width="min-content">
-            <Input type="email" placeholder="Email" />
+            <Input ref={emailRef} type="email" placeholder="Email" />
             <InputGroup>
               <Input
                 type={show ? 'text' : 'password'}
@@ -54,8 +53,8 @@ const Login = () => {
                 placeholder="Senha"
               />
               <InputRightElement width="4.5rem">
-                <Button onClick={() => setShow(!show)} h="2.625rem">
-                  {show ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                <Button variant="unstyled" onClick={() => setShow(!show)}>
+                  {show ? <ViewIcon /> : <ViewOffIcon />}
                 </Button>
               </InputRightElement>
             </InputGroup>
