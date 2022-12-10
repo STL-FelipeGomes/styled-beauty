@@ -1,17 +1,25 @@
-import { Box } from "@chakra-ui/react";
+import { Box } from '@chakra-ui/react';
 
-const Layout = ({ ...props }) => {
+const Layout = ({
+  display,
+  alignItems,
+  flexDirection,
+  justifyContent,
+  height,
+  gap,
+  children,
+}) => {
   return (
     <Box
       padding="1rem"
-      display={props.display}
-      alignItems={props.alignItems}
-      flexDirection={props.flexDirection}
-      justifyContent={props.justifyContent}
-      height={props.height}
-      gap={props.gap}
+      display={display}
+      alignItems={alignItems}
+      flexDirection={flexDirection}
+      justifyContent={justifyContent}
+      height={height}
+      gap={gap}
     >
-      {props.children}
+      {children}
     </Box>
   );
 };
