@@ -4,10 +4,12 @@ import { Input as InputChakra } from '@chakra-ui/react';
 const Input = forwardRef(({ placeholder, type }, ref) => {
   return (
     <InputChakra
+      variant="unstyled"
       isRequired
       type={type}
       ref={ref}
       minWidth="100%"
+      width="auto"
       placeholder={placeholder}
       marginBottom="0.5rem"
       padding="0.5rem 2rem"

@@ -5,18 +5,21 @@ import {
   Icon,
   InputGroup,
   InputRightElement,
+  useToast,
 } from '@chakra-ui/react';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { FcGoogle } from 'react-icons/fc';
 import { FaUserCircle } from 'react-icons/fa';
 import { createRef, useState } from 'react';
+
 import Layout from '../../components/Layout/Layout';
 import Input from '../../components/Input/Input';
 import auth from '../../database';
 
 const RegisterUser = () => {
   const [show, setShow] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const toast = useToast();
 
   const nameRef = createRef();
   const dateRef = createRef();
@@ -25,7 +28,7 @@ const RegisterUser = () => {
   const passwordRef = createRef();
   const passwordConfirmationRef = createRef();
 
-  const registerUser = async () => {
+  const registerUser = async (event) => {
     const { value: name } = nameRef.current;
     const { value: date } = dateRef.current;
     const { value: email } = emailRef.current;
@@ -33,17 +36,38 @@ const RegisterUser = () => {
     const { value: password } = passwordRef.current;
     const { value: passwordConfirmation } = passwordConfirmationRef.current;
 
-    if (
-      name &&
-      date &&
-      email &&
-      emailconfirmation &&
-      password &&
-      passwordConfirmation
-    ) {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      console.log('>>>>>> user', user);
+    console.log(email, emailconfirmation);
+
+    if (email !== emailconfirmation) {
+      console.log('entrando aqui');
+      toast({
+        description: 'Email de confirmação diferente!',
+        status: 'warning',
+        duration: 2000,
+        isClosable: true,
+        position: 'top',
+        background: 'red',
+      });
+      event.preventDefault();
+      emailConfirmationRef.current.style.borderColor = '#FF843F';
+      return true;
     }
+    emailConfirmationRef.current.style.borderColor = '#0F241D';
+
+    if (passwordConfirmation !== password) {
+      toast({
+        description: 'Senha de confirmação diferente!',
+        status: 'warning',
+        duration: 2000,
+        isClosable: true,
+        position: 'top',
+        background: 'red',
+      });
+      event.preventDefault();
+      passwordConfirmationRef.current.style.borderColor = '#FF843F';
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -79,16 +103,26 @@ const RegisterUser = () => {
                 placeholder="Senha"
               />
               <InputRightElement width="4.5rem">
-                <Button onClick={() => setShow(!show)} h="2.625rem">
-                  {show ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                <Button variant="unstyled" onClick={() => setShow(!show)}>
+                  {show ? <ViewIcon /> : <ViewOffIcon />}
                 </Button>
               </InputRightElement>
             </InputGroup>
-            <Input
-              type="text"
-              ref={passwordConfirmationRef}
-              placeholder="Confirmar senha"
-            />
+            <InputGroup>
+              <Input
+                type={showConfirmation ? 'text' : 'password'}
+                ref={passwordConfirmationRef}
+                placeholder="Confirmar senha"
+              />
+              <InputRightElement width="4.5rem">
+                <Button
+                  variant="unstyled"
+                  onClick={() => setShowConfirmation(!showConfirmation)}
+                >
+                  {showConfirmation ? <ViewIcon /> : <ViewOffIcon />}
+                </Button>
+              </InputRightElement>
+            </InputGroup>
           </Box>
           <Button
             marginTop="1rem"
@@ -110,7 +144,7 @@ const RegisterUser = () => {
           color="whiteX.600"
           _hover={{ background: 'greenX.600' }}
           transition="0.3s"
-          onClick={registerUser}
+          onClick={(event) => registerUser(event)}
         >
           Cadastrar
         </Button>
