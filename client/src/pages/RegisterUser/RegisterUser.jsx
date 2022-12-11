@@ -12,15 +12,18 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { FcGoogle } from 'react-icons/fc';
 import { FaUserCircle } from 'react-icons/fa';
 import { createRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Layout from '../../components/Layout/Layout';
 import Input from '../../components/Input/Input';
 import auth from '../../database';
+import { signUp } from '../../Request/request';
 
 const RegisterUser = () => {
   const [show, setShow] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const toast = useToast();
+  const navigate = useNavigate();
 
   const nameRef = createRef();
   const dateRef = createRef();
@@ -30,6 +33,8 @@ const RegisterUser = () => {
   const passwordConfirmationRef = createRef();
 
   const registerUser = async (event) => {
+    event.preventDefault();
+
     const { value: name } = nameRef.current;
     const { value: date } = dateRef.current;
     const { value: email } = emailRef.current;
@@ -37,7 +42,24 @@ const RegisterUser = () => {
     const { value: password } = passwordRef.current;
     const { value: passwordConfirmation } = passwordConfirmationRef.current;
 
-    // await createUserWithEmailAndPassword(auth, email, senha);
+    if (
+      !name ||
+      !date ||
+      !email ||
+      !emailConfirmationRef ||
+      !password ||
+      !passwordConfirmation
+    ) {
+      return toast({
+        description: 'Todos os campos são obrigatórios!',
+        status: 'warning',
+        duration: 2000,
+        isClosable: true,
+        position: 'top',
+        background: 'red',
+      });
+    }
+
     if (email !== emailconfirmation) {
       toast({
         description: 'Email de confirmação diferente!',
@@ -47,11 +69,23 @@ const RegisterUser = () => {
         position: 'top',
         background: 'red',
       });
-      event.preventDefault();
       emailConfirmationRef.current.style.borderColor = '#FF843F';
       return true;
     }
     emailConfirmationRef.current.style.borderColor = '#0F241D';
+
+    if (password.length < 6) {
+      toast({
+        description: 'A senha precisa conter no mínimo 6 digitos.',
+        status: 'warning',
+        duration: 2000,
+        isClosable: true,
+        position: 'top',
+        background: 'red',
+      });
+      passwordConfirmationRef.current.style.borderColor = '#FF843F';
+      return true;
+    }
 
     if (passwordConfirmation !== password) {
       toast({
@@ -62,10 +96,22 @@ const RegisterUser = () => {
         position: 'top',
         background: 'red',
       });
-      event.preventDefault();
       passwordConfirmationRef.current.style.borderColor = '#FF843F';
       return true;
     }
+
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      await signUp({
+        fullName: name,
+        email,
+        birthDate: date,
+      });
+      navigate('/home');
+    } catch (error) {
+      console.log(error);
+    }
+
     return false;
   };
 

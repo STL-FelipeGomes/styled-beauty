@@ -19,12 +19,10 @@ const Store = () => {
   const [store, setStore] = useState([]);
 
   const { id } = useParams();
-  console.log(id);
 
   useEffect(() => {
     (async () => {
       const { data } = await show({ id });
-      console.log(data);
       setStore(data);
     })();
   }, []);

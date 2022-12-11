@@ -111,3 +111,20 @@ export const destroy = async ({ id = '' }) => {
     return error;
   }
 };
+
+export const signUp = async ({ fullName, email, birthDate }) => {
+  try {
+    const request = await axios({
+      method: 'post',
+      url: `${path}/users/signup/`,
+      data: {
+        fullName,
+        email,
+        birthDate,
+      },
+    });
+    return request;
+  } catch (error) {
+    return error;
+  }
+};
