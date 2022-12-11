@@ -27,7 +27,6 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       const { data } = await index();
-      console.log(data);
       setStores(data);
     })();
   }, []);

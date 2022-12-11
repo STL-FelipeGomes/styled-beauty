@@ -128,3 +128,18 @@ export const signUp = async ({ fullName, email, birthDate }) => {
     return error;
   }
 };
+
+export const signIn = async ({ token }) => {
+  try {
+    const request = await axios({
+      method: 'post',
+      url: `${path}/users/signin/`,
+      data: {
+        token,
+      },
+    });
+    return request;
+  } catch (error) {
+    return error;
+  }
+};
