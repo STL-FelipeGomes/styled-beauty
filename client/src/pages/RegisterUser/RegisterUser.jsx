@@ -5,6 +5,7 @@ import {
   Icon,
   InputGroup,
   InputRightElement,
+  Stack,
   useToast,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
@@ -77,14 +78,14 @@ const RegisterUser = () => {
       gap="2rem"
     >
       <Icon boxSize="6rem" as={FaUserCircle} />
-      <form>
+      <Box as="form">
         <Box
           display="flex"
           flexDirection="column"
           alignItems="center"
           gap="1rem"
         >
-          <Box width="min-content">
+          <Stack width="min-content" spacing="0.5rem">
             <Input type="text" ref={nameRef} placeholder="Nome" />
             <Input type="date" ref={dateRef} placeholder="Data de nascimento" />
             <Input type="email" ref={emailRef} placeholder="Email" />
@@ -120,7 +121,7 @@ const RegisterUser = () => {
                 </Button>
               </InputRightElement>
             </InputGroup>
-          </Box>
+          </Stack>
           <Button
             marginTop="1rem"
             padding="0.3rem 1rem"
@@ -133,6 +134,8 @@ const RegisterUser = () => {
         <Button
           type="submit"
           marginTop="2rem"
+          display="block"
+          marginX="auto"
           background="greenX.700"
           borderRadius="15px"
           paddingY="0.5rem"
@@ -145,7 +148,7 @@ const RegisterUser = () => {
         >
           Cadastrar
         </Button>
-      </form>
+      </Box>
     </Layout>
   );
 };

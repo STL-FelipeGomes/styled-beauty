@@ -8,6 +8,7 @@ import {
   InputRightElement,
   Text,
 } from '@chakra-ui/react';
+import { ChevronLeftIcon, PlusSquareIcon, Search2Icon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri';
@@ -24,16 +25,24 @@ const Home = () => {
 
   return (
     <Layout>
-      <InputGroup>
-        <Input type="text" placeholder="Estabelecimento ou serviço" />
-        <InputRightElement>
-          <Search2Icon
-            fontWeight="500"
-            marginRight="1.5rem"
-            color="greenX.700"
-          />
-        </InputRightElement>
-      </InputGroup>
+      <Flex alignItems="center" marginBottom="1rem">
+        <Button
+          variant="unstyled"
+          onClick={() => (window.location.href = '/cadastrar-loja')}
+        >
+          <PlusSquareIcon fontSize="1.5rem" color="greenX.700" />
+        </Button>
+        <InputGroup>
+          <Input type="text" placeholder="Estabelecimento ou serviço" />
+          <InputRightElement>
+            <Search2Icon
+              fontWeight="500"
+              marginRight="1.5rem"
+              color="greenX.700"
+            />
+          </InputRightElement>
+        </InputGroup>
+      </Flex>
       <Flex
         borderBottom="1px solid"
         borderColor="blackX.400"
