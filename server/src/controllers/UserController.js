@@ -1,4 +1,4 @@
-const { db } = require('../firebase');
+const { db, auth } = require('../firebase');
 
 module.exports = {
   async signUp(req, res) {
@@ -12,6 +12,11 @@ module.exports = {
 
     if (!email) {
       errors.push({ error: { message: 'User email is required.' } });
+    } else {
+      try {
+        await auth.getUserByEmail(email);
+        errors.push({ error: { message: 'User already exists.' } });
+      } catch (error) {}
     }
 
     if (!birthDate) {
