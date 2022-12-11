@@ -5,6 +5,7 @@ import {
   InputGroup,
   InputRightElement,
   Link,
+  Stack,
 } from '@chakra-ui/react';
 import { createRef, useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
@@ -37,14 +38,14 @@ const Login = () => {
       gap="2rem"
     >
       <Icon boxSize="6rem" as={FaUserCircle} />
-      <form>
+      <Box as="form">
         <Box
           display="flex"
           flexDirection="column"
           alignItems="center"
           gap="1rem"
         >
-          <Box width="min-content">
+          <Stack width="min-content" spacing="0.5rem">
             <Input ref={emailRef} type="email" placeholder="Email" />
             <InputGroup>
               <Input
@@ -58,7 +59,7 @@ const Login = () => {
                 </Button>
               </InputRightElement>
             </InputGroup>
-          </Box>
+          </Stack>
           <Button
             marginTop="1rem"
             padding="0.3rem 1rem"
@@ -71,6 +72,8 @@ const Login = () => {
         <Button
           type="submit"
           marginTop="2rem"
+          display="block"
+          marginX="auto"
           background="greenX.700"
           borderRadius="15px"
           paddingY="0.5rem"
@@ -83,7 +86,7 @@ const Login = () => {
         >
           Entrar
         </Button>
-      </form>
+      </Box>
       <Link href="/cadastrar-se" color="blackX.500">
         Cadastrar-se
       </Link>

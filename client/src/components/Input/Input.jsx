@@ -12,7 +12,6 @@ const Input = forwardRef(({ placeholder, type, maxDate }, ref) => {
       minWidth="100%"
       width="auto"
       placeholder={placeholder}
-      marginBottom="0.5rem"
       padding="0.5rem 2rem"
       borderRadius="1rem"
       background="blackX.400"
