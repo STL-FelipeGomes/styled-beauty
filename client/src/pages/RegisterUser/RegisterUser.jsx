@@ -37,6 +37,7 @@ const RegisterUser = () => {
     const { value: password } = passwordRef.current;
     const { value: passwordConfirmation } = passwordConfirmationRef.current;
 
+    // await createUserWithEmailAndPassword(auth, email, senha);
     if (email !== emailconfirmation) {
       toast({
         description: 'Email de confirmação diferente!',
