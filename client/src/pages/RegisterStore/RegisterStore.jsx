@@ -140,7 +140,7 @@ const RegisterStore = () => {
             background="greenX.700"
             borderRadius="15px"
             paddingY="0.5rem"
-            width="15.6rem"
+            width="100%"
             fontWeight="500"
             color="whiteX.600"
             _hover={{ background: 'greenX.600' }}

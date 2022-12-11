@@ -18,6 +18,8 @@ const Layout = ({
       justifyContent={justifyContent}
       height={height}
       gap={gap}
+      margin="0 auto"
+      width="375px"
     >
       {children}
     </Box>
