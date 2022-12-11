@@ -1,4 +1,4 @@
-import { Search2Icon } from '@chakra-ui/icons';
+import { PlusSquareIcon, Search2Icon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -8,7 +8,6 @@ import {
   InputRightElement,
   Text,
 } from '@chakra-ui/react';
-import { ChevronLeftIcon, PlusSquareIcon, Search2Icon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri';
