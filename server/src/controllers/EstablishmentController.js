@@ -162,6 +162,11 @@ module.exports = {
       return res.status(400).json(errors);
     }
 
+    function generatorRandomRating(min, max) {
+      const randomNumber = Math.random() * (max - min + 1) + min;
+      return randomNumber.toFixed(1);
+    }
+
     const newEstab = {
       logo: logo ?? null,
       name,
@@ -172,7 +177,7 @@ module.exports = {
       email,
       phone,
       description,
-      rating: null,
+      rating: generatorRandomRating(0, 5),
       images: [],
       categoryIds: [],
       serviceIds: [],
@@ -181,6 +186,7 @@ module.exports = {
     const { id } = await db.collection('establishments').add(newEstab);
 
     const newEstabOwner = { establishmentId: id, ownerId: user_id };
+
     await db.collection('establishmentOwners').add(newEstabOwner);
 
     return res.status(201).json({ id, ...newEstab, ownerIds: [user_id] });

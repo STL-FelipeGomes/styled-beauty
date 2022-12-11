@@ -1,17 +1,35 @@
-const { auth } = require('../firebase');
+const { db } = require('../firebase');
 
 module.exports = {
   async signUp(req, res) {
-    const { email, password } = req.body;
+    const { fullName, email, birthDate } = req.body;
 
-    try {
-      const { uid, metadata, tokensValidAfterTime } = await auth.createUser({ email, password });
+    const errors = [];
 
-      const user = { uid, email, metadata, tokensValidAfterTime };
-
-      return res.status(201).json(user);
-    } catch (error) {
-      return res.status(400).json({ error });
+    if (!fullName) {
+      errors.push({ error: { message: 'User full name is required.' } });
     }
+
+    if (!email) {
+      errors.push({ error: { message: 'User email is required.' } });
+    }
+
+    if (!birthDate) {
+      errors.push({ error: { message: 'User birth date is required.' } });
+    }
+
+    if (errors.length) {
+      return res.status(400).json(errors);
+    }
+
+    const newUser = {
+      fullName,
+      email,
+      birthDate,
+    };
+
+    const { id } = await db.collection('users').add(newUser);
+
+    return res.status(201).json({ id, ...newUser });
   },
 };
