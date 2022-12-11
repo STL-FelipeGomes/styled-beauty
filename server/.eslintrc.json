@@ -12,7 +12,7 @@
   "rules": {
     "semi": ["error", "always"],
     "quotes": ["error", "single"],
-    "comma-dangle": ["error", "always-multiline"],
+    "comma-dangle": ["error", "only-multiline"],
     "space-before-function-paren": ["error", "never"],
     "camelcase": "off"
   }
