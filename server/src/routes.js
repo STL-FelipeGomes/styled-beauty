@@ -5,6 +5,7 @@ const UserController = require('./controllers/UserController');
 const EstablishmentController = require('./controllers/EstablishmentController');
 
 router.post('/users/signup', UserController.signUp);
+router.post('/users/signin', UserController.signIn);
 
 router.get('/establishments', EstablishmentController.index);
 router.get('/establishments/:id', EstablishmentController.show);
