@@ -1,13 +1,14 @@
 import { forwardRef } from 'react';
 import { Input as InputChakra } from '@chakra-ui/react';
 
-const Input = forwardRef(({ placeholder, type }, ref) => {
+const Input = forwardRef(({ placeholder, type, maxDate }, ref) => {
   return (
     <InputChakra
       variant="unstyled"
       isRequired
       type={type}
       ref={ref}
+      max={maxDate}
       minWidth="100%"
       width="auto"
       placeholder={placeholder}
@@ -15,7 +16,7 @@ const Input = forwardRef(({ placeholder, type }, ref) => {
       padding="0.5rem 2rem"
       borderRadius="1rem"
       background="blackX.400"
-      border="2px solid #0F241D"
+      border="1px solid #0F241D"
       focusBorderColor="red"
       _focus={{
         background: 'whiteX.700',

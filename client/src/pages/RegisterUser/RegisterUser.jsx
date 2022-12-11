@@ -36,10 +36,7 @@ const RegisterUser = () => {
     const { value: password } = passwordRef.current;
     const { value: passwordConfirmation } = passwordConfirmationRef.current;
 
-    console.log(email, emailconfirmation);
-
     if (email !== emailconfirmation) {
-      console.log('entrando aqui');
       toast({
         description: 'Email de confirmação diferente!',
         status: 'warning',

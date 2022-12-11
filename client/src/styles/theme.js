@@ -5,7 +5,6 @@ export default extendTheme({
     whiteX: {
       700: '#FFFFFF',
       600: '#F4F4F4',
-      500: '#E1E1E1',
     },
     blackX: {
       600: '#0F241D',
@@ -18,6 +17,9 @@ export default extendTheme({
     },
     orangeX: {
       700: '#FF843F',
+    },
+    redX: {
+      700: '#F20000',
     },
   },
   fonts: {
