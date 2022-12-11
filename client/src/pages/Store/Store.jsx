@@ -1,7 +1,8 @@
 import { Box, Button, Flex, Icon, Image, Text } from '@chakra-ui/react';
 import { ChevronLeftIcon, EmailIcon, PhoneIcon } from '@chakra-ui/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdDescription } from 'react-icons/md';
+import { useParams } from 'react-router-dom';
 import {
   AiFillHeart,
   AiOutlineHeart,
@@ -11,9 +12,34 @@ import {
 import { HiUser, HiLocationMarker } from 'react-icons/hi';
 import { FaStoreAlt } from 'react-icons/fa';
 import Layout from '../../components/Layout/Layout';
+import { show } from '../../Request/request';
 
 const Store = () => {
   const [favorite, setFavorite] = useState(false);
+  const [store, setStore] = useState([]);
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await show({ id });
+      setStore(data);
+    })();
+  }, []);
+
+  const handleRating = (rating) => {
+    const ratings = [];
+    for (let i = 1; i <= 5; i += 1) {
+      ratings.push(
+        <Icon
+          key={i}
+          as={i <= rating ? AiFillStar : AiOutlineStar}
+          color={i <= rating ? 'greenX.700' : 'black.500'}
+        />
+      );
+    }
+    return ratings;
+  };
 
   return (
     <Layout>
@@ -46,24 +72,22 @@ const Store = () => {
           fontWeight="500"
         >
           <Icon as={FaStoreAlt} color="greenX.700" marginRight="5px" />
-          Cabeleireira Leila
+          {store.name}
         </Text>
         <Image
-          SlideDirection="left"
           border="2px solid"
           borderRadius="5px"
           borderColor="blackX.500"
-          src="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
+          src={
+            store.logo ||
+            'https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg'
+          }
           maxWidth="250px"
           margin="0 auto"
         />
 
         <Flex marginTop="1rem" justifyContent="flex-start" gap="2px">
-          <Icon as={AiFillStar} color="greenX.700" />
-          <Icon as={AiFillStar} color="greenX.700" />
-          <Icon as={AiFillStar} color="greenX.700" />
-          <Icon as={AiFillStar} color="greenX.700" />
-          <Icon as={AiOutlineStar} color="black.500" />
+          {handleRating(store.rating)}
         </Flex>
         <Text marginTop="0.5rem" display="flex" alignItems="center">
           <Icon as={HiUser} marginRight="5px" color="greenX.700" />
@@ -71,19 +95,19 @@ const Store = () => {
         </Text>
         <Text marginTop="0.5rem" display="flex" alignItems="center">
           <Icon as={HiLocationMarker} marginRight="5px" color="greenX.700" />
-          Na rua
+          {store.address}
         </Text>
         <Text marginTop="0.5rem" display="flex" alignItems="center">
           <Icon as={MdDescription} marginRight="5px" color="greenX.700" />
-          Na rua
+          {store.description}
         </Text>
         <Text marginTop="0.5rem" display="flex" alignItems="center">
           <EmailIcon marginRight="5px" color="greenX.700" />
-          cabeleireiraleila@gmail.com
+          {store.email}
         </Text>
         <Text marginTop="0.5rem" display="flex" alignItems="center">
           <PhoneIcon marginRight="5px" color="greenX.700" />
-          4002-8922
+          {store.phone}
         </Text>
       </Box>
     </Layout>

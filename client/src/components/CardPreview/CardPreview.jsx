@@ -42,9 +42,7 @@ const CardPreview = ({
               <Icon as={HiUser} marginRight="5px" />
               {nameOwner}
             </Flex>
-            <Text noOfLines={1}>
-              {`${description}asdasdaasdas12312sdasdasdasdasdasdasdasdasdasd`}
-            </Text>
+            <Text noOfLines={1}>{description}</Text>
           </Box>
         </Flex>
         <Button

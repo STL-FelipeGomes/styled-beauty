@@ -8,19 +8,29 @@ import {
   InputRightElement,
   Text,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri';
 
 import CardPreview from '../../components/CardPreview/CardPreview';
 import Input from '../../components/Input/Input';
 import Layout from '../../components/Layout/Layout';
+import { index } from '../../Request/request';
 
 const Home = () => {
   const [select, setSelect] = useState(true);
   const [order, setOrder] = useState(true);
   const [distance, setDistance] = useState(true);
   const [favorite, setFavorite] = useState(false);
+  const [stores, setStores] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await index();
+      console.log(data);
+      setStores(data);
+    })();
+  }, []);
 
   return (
     <Layout>
@@ -137,69 +147,18 @@ const Home = () => {
         </Button>
       </Flex>
       <Box>
-        <CardPreview
-          id="0001"
-          image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
-          nameInstitution="Cabeleireira Leila"
-          evaluation="4.8"
-          nameOwner="Leila"
-          description="Um salão de cabeleireira da Cabeleireira Leila."
-          favorite
-        />
-        <CardPreview
-          image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
-          nameInstitution="Cabeleireira Leila"
-          evaluation="4.8"
-          nameOwner="Leila"
-          description="Um salão de cabeleireira da Cabeleireira Leila."
-          favorite={false}
-          id="0001"
-        />
-        <CardPreview
-          image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
-          nameInstitution="Cabeleireira Leila"
-          evaluation="4.8"
-          nameOwner="Leila"
-          description="Um salão de cabeleireira da Cabeleireira Leila."
-          favorite={false}
-          id="0001"
-        />
-        <CardPreview
-          image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
-          nameInstitution="Cabeleireira Leila"
-          evaluation="4.8"
-          nameOwner="Leila"
-          description="Um salão de cabeleireira da Cabeleireira Leila."
-          favorite
-          id="0001"
-        />
-        <CardPreview
-          image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
-          nameInstitution="Cabeleireira Leila"
-          evaluation="4.8"
-          nameOwner="Leila"
-          description="Um salão de cabeleireira da Cabeleireira Leila."
-          favorite
-          id="0001"
-        />
-        <CardPreview
-          image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
-          nameInstitution="Cabeleireira Leila"
-          evaluation="4.8"
-          nameOwner="Leila"
-          description="Um salão de cabeleireira da Cabeleireira Leila."
-          favorite={false}
-          id="0001"
-        />
-        <CardPreview
-          image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
-          nameInstitution="Cabeleireira Leila"
-          evaluation="4.8"
-          nameOwner="Leila"
-          description="Um salão de cabeleireira da Cabeleireira Leila."
-          favorite
-          id="0001"
-        />
+        {stores.map((store) => (
+          <CardPreview
+            key={store.id}
+            id={store.id}
+            image={store.logo}
+            nameInstitution={store.name}
+            evaluation={store.rating}
+            nameOwner="store"
+            description={store.description}
+            favorite={false}
+          />
+        ))}
       </Box>
     </Layout>
   );
