@@ -37,4 +37,28 @@ module.exports = {
 
     return res.status(201).json({ id, ...newUser });
   },
+  async signIn(req, res) {
+    const { token } = req.body;
+
+    const errors = [];
+
+    if (!token) {
+      errors.push({ error: { message: 'User token is required.' } });
+    }
+
+    if (errors.length) {
+      return res.status(400).json(errors);
+    }
+
+    try {
+      const { uid, email, firebase } = await auth.verifyIdToken(token);
+      const authProvider = firebase.sign_in_provider;
+
+      const data = { uid, email, authProvider };
+
+      return res.status(200).json(data);
+    } catch (error) {
+      return res.status(400).json({ errors: [error] });
+    }
+  },
 };
