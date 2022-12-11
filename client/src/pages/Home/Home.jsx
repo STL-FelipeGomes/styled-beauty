@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Flex,
   Icon,
@@ -127,62 +128,71 @@ const Home = () => {
           />
         </Button>
       </Flex>
-      <CardPreview
-        image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
-        nameInstitution="Cabeleireira Leila"
-        evaluation="4.8"
-        nameOwner="Leila"
-        description="Um salão de cabeleireira da Cabeleireira Leila."
-        favorite
-      />
-      <CardPreview
-        image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
-        nameInstitution="Cabeleireira Leila"
-        evaluation="4.8"
-        nameOwner="Leila"
-        description="Um salão de cabeleireira da Cabeleireira Leila."
-        favorite={false}
-      />
-      <CardPreview
-        image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
-        nameInstitution="Cabeleireira Leila"
-        evaluation="4.8"
-        nameOwner="Leila"
-        description="Um salão de cabeleireira da Cabeleireira Leila."
-        favorite={false}
-      />
-      <CardPreview
-        image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
-        nameInstitution="Cabeleireira Leila"
-        evaluation="4.8"
-        nameOwner="Leila"
-        description="Um salão de cabeleireira da Cabeleireira Leila."
-        favorite
-      />
-      <CardPreview
-        image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
-        nameInstitution="Cabeleireira Leila"
-        evaluation="4.8"
-        nameOwner="Leila"
-        description="Um salão de cabeleireira da Cabeleireira Leila."
-        favorite
-      />
-      <CardPreview
-        image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
-        nameInstitution="Cabeleireira Leila"
-        evaluation="4.8"
-        nameOwner="Leila"
-        description="Um salão de cabeleireira da Cabeleireira Leila."
-        favorite={false}
-      />
-      <CardPreview
-        image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
-        nameInstitution="Cabeleireira Leila"
-        evaluation="4.8"
-        nameOwner="Leila"
-        description="Um salão de cabeleireira da Cabeleireira Leila."
-        favorite
-      />
+      <Box>
+        <CardPreview
+          image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
+          nameInstitution="Cabeleireira Leila"
+          evaluation="4.8"
+          nameOwner="Leila"
+          description="Um salão de cabeleireira da Cabeleireira Leila."
+          favorite
+          id="0001"
+        />
+        <CardPreview
+          image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
+          nameInstitution="Cabeleireira Leila"
+          evaluation="4.8"
+          nameOwner="Leila"
+          description="Um salão de cabeleireira da Cabeleireira Leila."
+          favorite={false}
+          id="0001"
+        />
+        <CardPreview
+          image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
+          nameInstitution="Cabeleireira Leila"
+          evaluation="4.8"
+          nameOwner="Leila"
+          description="Um salão de cabeleireira da Cabeleireira Leila."
+          favorite={false}
+          id="0001"
+        />
+        <CardPreview
+          image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
+          nameInstitution="Cabeleireira Leila"
+          evaluation="4.8"
+          nameOwner="Leila"
+          description="Um salão de cabeleireira da Cabeleireira Leila."
+          favorite
+          id="0001"
+        />
+        <CardPreview
+          image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
+          nameInstitution="Cabeleireira Leila"
+          evaluation="4.8"
+          nameOwner="Leila"
+          description="Um salão de cabeleireira da Cabeleireira Leila."
+          favorite
+          id="0001"
+        />
+        <CardPreview
+          image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
+          nameInstitution="Cabeleireira Leila"
+          evaluation="4.8"
+          nameOwner="Leila"
+          description="Um salão de cabeleireira da Cabeleireira Leila."
+          favorite={false}
+          id="0001"
+        />
+        <CardPreview
+          image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
+          nameInstitution="Cabeleireira Leila"
+          evaluation="4.8"
+          nameOwner="Leila"
+          description="Um salão de cabeleireira da Cabeleireira Leila."
+          favorite
+          id="0001"
+        />
+      </Box>
     </Layout>
   );
 };

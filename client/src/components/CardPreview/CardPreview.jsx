@@ -19,6 +19,7 @@ const CardPreview = ({
   nameOwner,
   description,
   favorite,
+  id,
 }) => {
   return (
     <Card marginTop="1rem" borderRadius="5px">
@@ -27,7 +28,7 @@ const CardPreview = ({
         alignItems="flex-start"
         justifyContent="space-between"
       >
-        <Flex as="a" href="/" alignItems="center">
+        <Flex as="a" href={`/loja/${id}`} alignItems="center">
           <Avatar src={image} boxSize="3.5rem" name="Cabeleireira Leila" />
           <Box marginLeft="0.5rem" fontSize="0.8rem">
             <Text fontSize="1rem" fontWeight="500">
