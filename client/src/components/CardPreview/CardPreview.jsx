@@ -28,27 +28,22 @@ const CardPreview = ({
         alignItems="flex-start"
         justifyContent="space-between"
       >
-        <Flex as="a" href={`/loja/${id}`} alignItems="center">
-          <Avatar src={image} boxSize="3.5rem" name="Cabeleireira Leila" />
-          <Box marginLeft="0.5rem" fontSize="0.8rem">
-            <Text fontSize="1rem" fontWeight="500">
+        <Flex as="a" href={`/loja/${id}`} alignItems="center" maxWidth="100%">
+          <Avatar src={image} boxSize="3.5rem" name={nameInstitution} />
+          <Box marginLeft="0.5rem" width="13rem" fontSize="0.8rem">
+            <Flex as="p" fontSize="1rem" fontWeight="500">
               {nameInstitution}
-            </Text>
-            <Text display="flex" alignItems="center">
+            </Flex>
+            <Flex as="p" alignItems="center">
               <Icon as={AiFillStar} marginRight="5px" />
               {evaluation}
-            </Text>
-            <Text display="flex" alignItems="center">
+            </Flex>
+            <Flex as="p" alignItems="center">
               <Icon as={HiUser} marginRight="5px" />
               {nameOwner}
-            </Text>
-            <Text
-              width="13rem"
-              overflow="hidden"
-              textOverflow="ellipsis"
-              whiteSpace="nowrap"
-            >
-              {description}
+            </Flex>
+            <Text noOfLines={1}>
+              {`${description}asdasdaasdas12312sdasdasdasdasdasdasdasdasdasd`}
             </Text>
           </Box>
         </Flex>

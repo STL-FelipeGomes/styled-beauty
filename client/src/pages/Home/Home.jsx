@@ -138,13 +138,13 @@ const Home = () => {
       </Flex>
       <Box>
         <CardPreview
+          id="0001"
           image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
           nameInstitution="Cabeleireira Leila"
           evaluation="4.8"
           nameOwner="Leila"
           description="Um salão de cabeleireira da Cabeleireira Leila."
           favorite
-          id="0001"
         />
         <CardPreview
           image="https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg"
