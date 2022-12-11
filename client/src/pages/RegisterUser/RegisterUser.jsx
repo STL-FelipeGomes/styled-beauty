@@ -1,4 +1,8 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from 'firebase/auth';
 import {
   Box,
   Button,
@@ -16,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Layout from '../../components/Layout/Layout';
 import Input from '../../components/Input/Input';
-import auth from '../../database';
+import auth, { provider } from '../../database';
 import { signUp } from '../../Request/request';
 
 const RegisterUser = () => {
@@ -115,6 +119,18 @@ const RegisterUser = () => {
     return false;
   };
 
+  const signInGoogle = async () => {
+    try {
+      const sign = await signInWithPopup(auth, provider);
+      const credential = GoogleAuthProvider.credentialFromResult(sign);
+      const token = credential.accessToken;
+      localStorage.setItem('token', token);
+      navigate('/home');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Layout
       display="flex"
@@ -174,6 +190,7 @@ const RegisterUser = () => {
             padding="0.3rem 1rem"
             borderRadius="5px"
             border="1px solid rgba(99, 99, 99, 0.2)"
+            onClick={signInGoogle}
           >
             <Icon as={FcGoogle} boxSize="2.5rem" />
           </Button>
