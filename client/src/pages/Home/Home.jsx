@@ -1,3 +1,4 @@
+import { Search2Icon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -7,14 +8,13 @@ import {
   InputRightElement,
   Text,
 } from '@chakra-ui/react';
-import { Search2Icon } from '@chakra-ui/icons';
 import { useState } from 'react';
-import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri';
 
-import Layout from '../../components/Layout/Layout';
 import CardPreview from '../../components/CardPreview/CardPreview';
 import Input from '../../components/Input/Input';
+import Layout from '../../components/Layout/Layout';
 
 const Home = () => {
   const [select, setSelect] = useState(true);
