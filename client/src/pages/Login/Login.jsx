@@ -84,7 +84,7 @@ const Login = () => {
           Entrar
         </Button>
       </form>
-      <Link href="/cadastror-se" color="blackX.500">
+      <Link href="/cadastrar-se" color="blackX.500">
         Cadastrar-se
       </Link>
       <Link href="/" color="blackX.500">
