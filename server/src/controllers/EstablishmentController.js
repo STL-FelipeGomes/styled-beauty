@@ -20,7 +20,9 @@ module.exports = {
 
     const filterdEstabs = estabs.map((estab) => {
       const ownerIds = estabOwners
-        .map(({ establishmentId, ownerId }) => establishmentId === estab.id ? ownerId : null)
+        .map(({ establishmentId, ownerId }) =>
+          establishmentId === estab.id ? ownerId : null
+        )
         .filter((ownerId) => ownerId);
 
       return { ...estab, ownerIds };
@@ -35,11 +37,15 @@ module.exports = {
     const estabSnapshot = await estabRef.get();
 
     if (!estabSnapshot.exists) {
-      return res.status(404).json({ error: { message: 'Establishment not found.' } });
+      return res
+        .status(404)
+        .json({ error: { message: 'Establishment not found.' } });
     }
 
     const estabOwnerRef = db.collection('establishmentOwners');
-    const estabOwnerSnapshot = await estabOwnerRef.where('establishmentId', '==', id).get();
+    const estabOwnerSnapshot = await estabOwnerRef
+      .where('establishmentId', '==', id)
+      .get();
 
     const ownerIds = [];
     estabOwnerSnapshot.forEach((estabOwner) => {
@@ -56,7 +62,9 @@ module.exports = {
     const estabSnapshot = await estabRef.get();
 
     const estabOwnerRef = db.collection('establishmentOwners');
-    const estabOwnerSnapshot = await estabOwnerRef.where('ownerId', '==', user_id).get();
+    const estabOwnerSnapshot = await estabOwnerRef
+      .where('ownerId', '==', user_id)
+      .get();
 
     const estabs = [];
     estabSnapshot.forEach((estab) => {
@@ -71,7 +79,9 @@ module.exports = {
     const filterdEstabs = estabs
       .map((estab) => {
         const ownerIds = estabOwners
-          .map(({ establishmentId, ownerId }) => establishmentId === estab.id ? ownerId : null)
+          .map(({ establishmentId, ownerId }) =>
+            establishmentId === estab.id ? ownerId : null
+          )
           .filter((ownerId) => ownerId);
 
         return { ...estab, ownerIds };
@@ -81,7 +91,17 @@ module.exports = {
     return res.json(filterdEstabs);
   },
   async store(req, res) {
-    const { name, address, logo } = req.body;
+    const {
+      logo,
+      name,
+      address,
+      openingHours,
+      specialization,
+      serviceType,
+      email,
+      phone,
+      description,
+    } = req.body;
     const { user_id } = req.params;
 
     const errors = [];
@@ -104,14 +124,54 @@ module.exports = {
       errors.push({ error: { message: 'Establishment address is required.' } });
     }
 
+    if (!openingHours) {
+      errors.push({
+        error: { message: 'Establishment opening hours are required.' },
+      });
+    }
+
+    if (!specialization) {
+      errors.push({
+        error: { message: 'Establishment specialization is required.' },
+      });
+    }
+
+    if (!serviceType) {
+      errors.push({
+        error: { message: 'Establishment service type is required.' },
+      });
+    }
+
+    if (!email) {
+      errors.push({ error: { message: 'Establishment email is required.' } });
+    }
+
+    if (!phone) {
+      errors.push({
+        error: { message: 'Establishment phone number is required.' },
+      });
+    }
+
+    if (!description) {
+      errors.push({
+        error: { message: 'Establishment description is required.' },
+      });
+    }
+
     if (errors.length) {
       return res.status(400).json(errors);
     }
 
     const newEstab = {
+      logo: logo ?? null,
       name,
       address,
-      logo: logo ?? null,
+      openingHours,
+      specialization,
+      serviceType,
+      email,
+      phone,
+      description,
       rating: null,
       images: [],
       categoryIds: [],
@@ -133,7 +193,9 @@ module.exports = {
     const estabSnapshot = await estabRef.get();
 
     if (!estabSnapshot.exists) {
-      return res.status(404).json({ error: { message: 'Establishment not found.' } });
+      return res
+        .status(404)
+        .json({ error: { message: 'Establishment not found.' } });
     }
 
     const estabData = estabSnapshot.data();
@@ -163,7 +225,9 @@ module.exports = {
     const estabSnapshot = await estabRef.get();
 
     if (!estabSnapshot.exists) {
-      return res.status(404).json({ error: { message: 'Establishment not found.' } });
+      return res
+        .status(404)
+        .json({ error: { message: 'Establishment not found.' } });
     }
 
     try {
