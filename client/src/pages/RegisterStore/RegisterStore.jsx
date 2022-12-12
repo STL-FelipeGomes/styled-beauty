@@ -7,12 +7,15 @@ import {
   RadioGroup,
   Flex,
   Stack,
+  useToast,
 } from '@chakra-ui/react';
 import { createRef, useRef } from 'react';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { FaUserCircle } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/Layout/Layout';
 import Input from '../../components/Input/Input';
+import { signIn, store } from '../../Request/request';
 
 const RegisterStore = () => {
   const nameRef = createRef();
@@ -23,11 +26,14 @@ const RegisterStore = () => {
   const emailRef = createRef();
   const phoneRef = createRef();
   const descriptionRef = createRef();
+  const imageRef = createRef();
+  const navigate = useNavigate();
+  const toast = useToast();
 
   const { body } = document;
   body.style.overflowY = 'hidden';
 
-  const registerStore = () => {
+  const registerStore = async () => {
     const { value: name } = nameRef.current;
     const { value: location } = locationRef.current;
     const { value: specialization } = specializationRef.current;
@@ -36,17 +42,53 @@ const RegisterStore = () => {
     const { value: email } = emailRef.current;
     const { value: phone } = phoneRef.current;
     const { value: description } = descriptionRef.current;
+    const { value: image } = imageRef.current;
 
-    console.log(
-      name,
-      location,
-      specialization,
-      openHours,
-      typeService,
-      email,
-      phone,
-      description
-    );
+    if (
+      !name ||
+      !location ||
+      !specialization ||
+      !openHours ||
+      !typeService ||
+      !email ||
+      !phone ||
+      !description ||
+      !image
+    ) {
+      return toast({
+        description: 'Todos os campos são obrigatórios',
+        status: 'warning',
+        duration: 2000,
+        isClosable: true,
+        position: 'top',
+        background: 'red',
+      });
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const user = await signIn({ token });
+      const userId = user.data.uid;
+      const newStore = await store({
+        logo: image,
+        name,
+        address: location,
+        openingHours: openHours,
+        specialization,
+        serviceType: typeService,
+        email,
+        phone,
+        description,
+        userId,
+      });
+
+      const storeId = newStore.data.id;
+      navigate(`/loja/${storeId}`);
+    } catch (error) {
+      console.log(error);
+    }
+
+    return true;
   };
 
   return (
@@ -129,11 +171,11 @@ const RegisterStore = () => {
                   type="text"
                   placeholder="Descrição do serviço"
                 />
+                <Input ref={imageRef} type="text" placeholder="URL da imagem" />
               </Stack>
             </Box>
           </Box>
           <Button
-            type="submit"
             marginTop="2rem"
             display="block"
             marginX="auto"
