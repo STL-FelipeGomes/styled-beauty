@@ -1,8 +1,4 @@
-import {
-  createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from 'firebase/auth';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -12,22 +8,21 @@ import {
   Stack,
   useToast,
 } from '@chakra-ui/react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { FcGoogle } from 'react-icons/fc';
-import { FaUserCircle } from 'react-icons/fa';
+import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { createRef, useState } from 'react';
+import { FaUserCircle } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
 
-import Layout from '../../components/Layout/Layout';
-import Input from '../../components/Input/Input';
 import auth, { provider } from '../../database';
-import { signUp } from '../../Request/request';
+import { signUp } from '../../services/api';
+
+import Input from '../../components/Input/Input';
+import Layout from '../../components/Layout/Layout';
 
 const RegisterUser = () => {
   const [show, setShow] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const toast = useToast();
-  const navigate = useNavigate();
 
   const nameRef = createRef();
   const dateRef = createRef();
@@ -35,6 +30,9 @@ const RegisterUser = () => {
   const emailConfirmationRef = createRef();
   const passwordRef = createRef();
   const passwordConfirmationRef = createRef();
+
+  const toast = useToast();
+  const navigate = useNavigate();
 
   const registerUser = async (event) => {
     event.preventDefault();
@@ -74,7 +72,7 @@ const RegisterUser = () => {
         background: 'red',
       });
       emailConfirmationRef.current.style.borderColor = '#FF843F';
-      return true;
+      return;
     }
     emailConfirmationRef.current.style.borderColor = '#0F241D';
 
@@ -88,7 +86,7 @@ const RegisterUser = () => {
         background: 'red',
       });
       passwordConfirmationRef.current.style.borderColor = '#FF843F';
-      return true;
+      return;
     }
 
     if (passwordConfirmation !== password) {
@@ -101,33 +99,44 @@ const RegisterUser = () => {
         background: 'red',
       });
       passwordConfirmationRef.current.style.borderColor = '#FF843F';
-      return true;
+      return;
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      await signUp({
-        fullName: name,
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
         email,
+        password
+      );
+      await signUp({
+        id: user.uid,
+        fullName: name,
         birthDate: date,
       });
-      navigate('/home');
-    } catch (error) {
-      console.log(error);
-    }
 
-    return false;
+      return navigate('/home');
+    } catch (error) {
+      return console.log(error);
+    }
   };
 
-  const signInGoogle = async () => {
+  const signInWithGoogle = async () => {
     try {
-      const sign = await signInWithPopup(auth, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(sign);
-      const token = credential.accessToken;
-      localStorage.setItem('token', token);
-      navigate('/home');
+      const { user } = await signInWithPopup(auth, provider);
+
+      const { uid, displayName, accessToken } = user;
+
+      await signUp({
+        id: uid,
+        fullName: displayName,
+        birthDate: '0000-00-00',
+      });
+
+      localStorage.setItem('token', accessToken);
+
+      return navigate('/home');
     } catch (error) {
-      console.log(error);
+      return console.log(error);
     }
   };
 
@@ -190,7 +199,7 @@ const RegisterUser = () => {
             padding="0.3rem 1rem"
             borderRadius="5px"
             border="1px solid rgba(99, 99, 99, 0.2)"
-            onClick={signInGoogle}
+            onClick={signInWithGoogle}
           >
             <Icon as={FcGoogle} boxSize="2.5rem" />
           </Button>

@@ -29,5 +29,6 @@ module.exports = {
     'react/prop-types': 'off',
     'no-unused-vars': 'warn',
     'no-param-reassign': 'off',
+    'consistent-return': 'off',
   },
 };

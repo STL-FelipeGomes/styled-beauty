@@ -15,7 +15,7 @@ import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri';
 import CardPreview from '../../components/CardPreview/CardPreview';
 import Input from '../../components/Input/Input';
 import Layout from '../../components/Layout/Layout';
-import { index } from '../../Request/request';
+import { index } from '../../services/api';
 
 const Home = () => {
   const [select, setSelect] = useState(true);
