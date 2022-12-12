@@ -15,7 +15,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
 
 import auth, { provider } from '../../database';
-import { signUp } from '../../services/api';
+import { authenticateWithGoogle, signUp } from '../../services/api';
 
 import Input from '../../components/Input/Input';
 import Layout from '../../components/Layout/Layout';
@@ -124,12 +124,12 @@ const RegisterUser = () => {
     try {
       const { user } = await signInWithPopup(auth, provider);
 
-      const { uid, displayName, accessToken } = user;
+      const { uid, email, displayName, accessToken } = user;
 
-      await signUp({
+      await authenticateWithGoogle({
         id: uid,
+        email,
         fullName: displayName,
-        birthDate: '0000-00-00',
       });
 
       localStorage.setItem('token', accessToken);

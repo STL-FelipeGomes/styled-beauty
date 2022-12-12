@@ -143,3 +143,20 @@ export const signIn = async ({ token }) => {
     return error;
   }
 };
+
+export const authenticateWithGoogle = async ({ id, email, fullName }) => {
+  try {
+    const request = await axios({
+      method: 'post',
+      url: `${path}/users/oauth/`,
+      data: {
+        id,
+        email,
+        fullName,
+      },
+    });
+    return request;
+  } catch (error) {
+    return error;
+  }
+};
