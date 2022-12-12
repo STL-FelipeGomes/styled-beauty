@@ -6,7 +6,6 @@ const Layout = ({
   flexDirection,
   justifyContent,
   height,
-  width,
   gap,
   children,
 }) => {
