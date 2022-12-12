@@ -17,8 +17,8 @@ import { useNavigate } from 'react-router-dom';
 import auth, { provider } from '../../database';
 import { authenticateWithGoogle, signUp } from '../../services/api';
 
-import Input from '../../components/Input/Input';
-import Layout from '../../components/Layout/Layout';
+import Input from '../../components/Input';
+import Layout from '../../components/Layout';
 
 const RegisterUser = () => {
   const [show, setShow] = useState(false);

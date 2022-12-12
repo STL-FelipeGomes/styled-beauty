@@ -12,7 +12,7 @@ import { HiLocationMarker, HiUser } from 'react-icons/hi';
 import { MdDescription } from 'react-icons/md';
 import { Link, useParams } from 'react-router-dom';
 
-import Layout from '../../components/Layout/Layout';
+import Layout from '../../components/Layout';
 import { show } from '../../services/api';
 
 const Store = () => {

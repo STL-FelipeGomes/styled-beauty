@@ -13,8 +13,8 @@ import {
 import { createRef, useRef } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
-import Input from '../../components/Input/Input';
-import Layout from '../../components/Layout/Layout';
+import Input from '../../components/Input';
+import Layout from '../../components/Layout';
 import { signIn, store } from '../../services/api';
 
 const RegisterStore = () => {

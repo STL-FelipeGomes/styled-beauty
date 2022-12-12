@@ -6,6 +6,7 @@ const Layout = ({
   flexDirection,
   justifyContent,
   height,
+  width,
   gap,
   children,
 }) => {
@@ -19,7 +20,7 @@ const Layout = ({
       height={height}
       gap={gap}
       margin="0 auto"
-      width="375px"
+      width="min(375px, 90%)"
     >
       {children}
     </Box>
