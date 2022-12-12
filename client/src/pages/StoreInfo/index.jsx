@@ -1,5 +1,13 @@
 import { ChevronLeftIcon, EmailIcon, PhoneIcon } from '@chakra-ui/icons';
-import { Box, Button, Flex, Icon, Image, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Icon,
+  Image,
+  Text,
+} from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import {
   AiFillHeart,
@@ -12,10 +20,10 @@ import { HiLocationMarker, HiUser } from 'react-icons/hi';
 import { MdDescription } from 'react-icons/md';
 import { Link, useParams } from 'react-router-dom';
 
-import Layout from '../../components/Layout/Layout';
+import Layout from '../../components/Layout';
 import { show } from '../../services/api';
 
-const Store = () => {
+const StoreInfo = () => {
   const [favorite, setFavorite] = useState(false);
   const [store, setStore] = useState([]);
   const [ownerName, setOwnerName] = useState('');
@@ -50,14 +58,25 @@ const Store = () => {
 
   return (
     <Layout>
-      <Flex justifyContent="space-between">
-        <Button as={Link} to="/home" variant="unstyled">
+      <Flex justifyContent="space-between" alignItems="center">
+        <Button
+          as={Link}
+          to="/"
+          variant="unstyled"
+          display="flex"
+          alignItems="center"
+          justyifyContent="center"
+        >
           <ChevronLeftIcon fontSize="1.5rem" color="greenX.700" />
         </Button>
+        <Heading as="h1" size="md" color="greenX.700">
+          Styled Beauty
+        </Heading>
         <Button
           variant="unstyled"
           display="flex"
           alignItems="center"
+          justyifyContent="center"
           onClick={() => setFavorite(!favorite)}
         >
           <Icon
@@ -79,27 +98,21 @@ const Store = () => {
           {store.name}
         </Text>
         <Image
-          border="2px solid"
           borderRadius="5px"
-          borderColor="blackX.500"
           src={
             store.logo ||
             'https://static.ricmais.com.br/uploads/2020/08/meme-cabeleireira-leila-1029x600.jpg'
           }
-          maxWidth="250px"
+          w="100%"
           margin="0 auto"
         />
 
-        <Flex marginTop="1rem" justifyContent="flex-start" gap="2px">
+        <Text marginTop="1rem" display="flex" alignItems="center">
           {handleRating(store.rating)}
-        </Flex>
+        </Text>
         <Text marginTop="0.5rem" display="flex" alignItems="center">
           <Icon as={HiUser} marginRight="5px" color="greenX.700" />
           {ownerName}
-        </Text>
-        <Text marginTop="0.5rem" display="flex" alignItems="center">
-          <Icon as={HiLocationMarker} marginRight="5px" color="greenX.700" />
-          {store.address}
         </Text>
         <Text marginTop="0.5rem" display="flex" alignItems="center">
           <Icon as={MdDescription} marginRight="5px" color="greenX.700" />
@@ -113,9 +126,13 @@ const Store = () => {
           <PhoneIcon marginRight="5px" color="greenX.700" />
           {store.phone}
         </Text>
+        <Text marginTop="0.5rem" display="flex" alignItems="center">
+          <Icon as={HiLocationMarker} marginRight="5px" color="greenX.700" />
+          {store.address}
+        </Text>
       </Box>
     </Layout>
   );
 };
 
-export default Store;
+export default StoreInfo;
