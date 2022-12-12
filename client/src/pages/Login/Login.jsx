@@ -1,8 +1,4 @@
-import {
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import {
   Box,
   Button,
@@ -34,9 +30,7 @@ const Login = () => {
   const signInGoogle = async () => {
     try {
       const sign = await signInWithPopup(auth, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(sign);
-      const token = credential.accessToken;
-      localStorage.setItem('token', token);
+      localStorage.setItem('token', sign.user.accessToken);
       navigate('/home');
     } catch (error) {
       console.log(error);
