@@ -11,6 +11,7 @@ import {
 import { useEffect, useState } from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri';
+import { Link } from 'react-router-dom';
 
 import CardPreview from '../../components/CardPreview/CardPreview';
 import Input from '../../components/Input/Input';
@@ -34,10 +35,7 @@ const Home = () => {
   return (
     <Layout>
       <Flex alignItems="center" marginBottom="1rem">
-        <Button
-          variant="unstyled"
-          onClick={() => (window.location.href = '/cadastrar-loja')}
-        >
+        <Button as={Link} to="/cadastrar-loja" variant="unstyled">
           <PlusSquareIcon fontSize="1.5rem" color="greenX.700" />
         </Button>
         <InputGroup>
