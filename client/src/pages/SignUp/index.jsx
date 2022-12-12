@@ -2,27 +2,30 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
+  Heading,
   Icon,
   InputGroup,
   InputRightElement,
+  Link as ChakraLink,
   Stack,
-  useToast,
+  Text,
 } from '@chakra-ui/react';
 import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { createRef, useState } from 'react';
-import { FaUserCircle } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import auth, { provider } from '../../database';
 import { authenticateWithGoogle, signUp } from '../../services/api';
 
 import Input from '../../components/Input';
 import Layout from '../../components/Layout';
+import useWarning from '../../hooks/useWarning';
 
 const RegisterUser = () => {
-  const [show, setShow] = useState(false);
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] =
+    useState(false);
 
   const nameRef = createRef();
   const dateRef = createRef();
@@ -31,74 +34,59 @@ const RegisterUser = () => {
   const passwordRef = createRef();
   const passwordConfirmationRef = createRef();
 
-  const toast = useToast();
   const navigate = useNavigate();
+  const warning = useWarning();
 
-  const registerUser = async (event) => {
-    event.preventDefault();
+  const registerUser = async () => {
+    const name = nameRef.current.value;
+    const date = dateRef.current.value;
+    const email = emailRef.current.value;
+    const emailConfirmation = emailConfirmationRef.current.value;
+    const password = passwordRef.current.value;
+    const passwordConfirmation = passwordConfirmationRef.current.value;
 
-    const { value: name } = nameRef.current;
-    const { value: date } = dateRef.current;
-    const { value: email } = emailRef.current;
-    const { value: emailconfirmation } = emailConfirmationRef.current;
-    const { value: password } = passwordRef.current;
-    const { value: passwordConfirmation } = passwordConfirmationRef.current;
+    let errors = 0;
 
-    if (
-      !name ||
-      !date ||
-      !email ||
-      !emailConfirmationRef ||
-      !password ||
-      !passwordConfirmation
-    ) {
-      return toast({
-        description: 'Todos os campos são obrigatórios!',
-        status: 'warning',
-        duration: 2000,
-        isClosable: true,
-        position: 'top',
-        background: 'red',
-      });
+    if (!name) {
+      warning('O campo nome é obrigatório!');
+      errors += 1;
     }
 
-    if (email !== emailconfirmation) {
-      toast({
-        description: 'Email de confirmação diferente!',
-        status: 'warning',
-        duration: 2000,
-        isClosable: true,
-        position: 'top',
-        background: 'red',
-      });
-      emailConfirmationRef.current.style.borderColor = '#FF843F';
-      return;
-    }
-    emailConfirmationRef.current.style.borderColor = '#0F241D';
-
-    if (password.length < 6) {
-      toast({
-        description: 'A senha precisa conter no mínimo 6 digitos.',
-        status: 'warning',
-        duration: 2000,
-        isClosable: true,
-        position: 'top',
-        background: 'red',
-      });
-      passwordConfirmationRef.current.style.borderColor = '#FF843F';
-      return;
+    if (!date) {
+      warning('O campo data de nascimento é obrigatório!');
+      errors += 1;
     }
 
-    if (passwordConfirmation !== password) {
-      toast({
-        description: 'Senha de confirmação diferente!',
-        status: 'warning',
-        duration: 2000,
-        isClosable: true,
-        position: 'top',
-        background: 'red',
-      });
-      passwordConfirmationRef.current.style.borderColor = '#FF843F';
+    if (!email) {
+      warning('O campo e-mail é obrigatório!');
+      errors += 1;
+    } else if (!emailConfirmation) {
+      warning('O campo confirmação de e-mail é obrigatório!');
+      errors += 1;
+    }
+
+    if (!password) {
+      warning('O campo senha é obrigatório!');
+      errors += 1;
+    } else if (password.length < 6) {
+      warning('As senhas precisam ter no mínimo 6 (seis) caracteres!');
+      errors += 1;
+    } else if (!passwordConfirmation) {
+      warning('O campo confirmação de senha é obrigatório!');
+      errors += 1;
+    }
+
+    if (email && emailConfirmation && email !== emailConfirmation) {
+      warning('Os endereços de e-mail não são iguais!');
+      errors += 1;
+    }
+
+    if (password && passwordConfirmation && passwordConfirmation !== password) {
+      warning('As senhas não são iguais!');
+      errors += 1;
+    }
+
+    if (errors) {
       return;
     }
 
@@ -114,9 +102,11 @@ const RegisterUser = () => {
         birthDate: date,
       });
 
-      return navigate('/home');
-    } catch (error) {
-      return console.log(error);
+      return navigate('/');
+    } catch ({ code }) {
+      if (code === 'auth/invalid-email') {
+        return warning('Endereço de e-mail inválido!');
+      }
     }
   };
 
@@ -134,10 +124,8 @@ const RegisterUser = () => {
 
       localStorage.setItem('token', accessToken);
 
-      return navigate('/home');
-    } catch (error) {
-      return console.log(error);
-    }
+      return navigate('/');
+    } catch (error) {}
   };
 
   return (
@@ -146,81 +134,96 @@ const RegisterUser = () => {
       justifyContent="center"
       alignItems="center"
       flexDirection="column"
-      height="100vh"
       gap="2rem"
     >
-      <Icon boxSize="6rem" as={FaUserCircle} />
-      <Box as="form">
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          gap="1rem"
-        >
-          <Stack width="min-content" spacing="0.5rem">
-            <Input type="text" ref={nameRef} placeholder="Nome" />
-            <Input type="date" ref={dateRef} placeholder="Data de nascimento" />
-            <Input type="email" ref={emailRef} placeholder="Email" />
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        gap="1rem"
+        w="100%"
+      >
+        <Heading as="h1" size="2xl" mb={8} color="greenX.600">
+          Styled Beauty
+        </Heading>
+        <Stack w="100%" spacing="1rem">
+          <Heading as="h2" size="md" textAlign="center" mb={2}>
+            Faça seu cadastro
+          </Heading>
+
+          <Input type="text" ref={nameRef} placeholder="Nome" />
+          <Input type="date" ref={dateRef} placeholder="Data de nascimento" />
+          <Input type="email" ref={emailRef} placeholder="Email" />
+          <Input
+            type="email"
+            ref={emailConfirmationRef}
+            placeholder="Confirmar email"
+          />
+          <InputGroup>
             <Input
-              type="email"
-              ref={emailConfirmationRef}
-              placeholder="Confirmar email"
+              type={showPassword ? 'text' : 'password'}
+              ref={passwordRef}
+              placeholder="Senha"
             />
-            <InputGroup>
-              <Input
-                type={show ? 'text' : 'password'}
-                ref={passwordRef}
-                placeholder="Senha"
-              />
-              <InputRightElement width="4.5rem">
-                <Button variant="unstyled" onClick={() => setShow(!show)}>
-                  {show ? <ViewIcon /> : <ViewOffIcon />}
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-            <InputGroup>
-              <Input
-                type={showConfirmation ? 'text' : 'password'}
-                ref={passwordConfirmationRef}
-                placeholder="Confirmar senha"
-              />
-              <InputRightElement width="4.5rem">
-                <Button
-                  variant="unstyled"
-                  onClick={() => setShowConfirmation(!showConfirmation)}
-                >
-                  {showConfirmation ? <ViewIcon /> : <ViewOffIcon />}
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-          </Stack>
+            <InputRightElement h={50} pr={4}>
+              <Button
+                variant="unstyled"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+          <InputGroup>
+            <Input
+              type={showPasswordConfirmation ? 'text' : 'password'}
+              ref={passwordConfirmationRef}
+              placeholder="Confirmar senha"
+            />
+            <InputRightElement h={50} pr={4}>
+              <Button
+                variant="unstyled"
+                onClick={() =>
+                  setShowPasswordConfirmation(!showPasswordConfirmation)
+                }
+              >
+                {showPasswordConfirmation ? <ViewIcon /> : <ViewOffIcon />}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+
           <Button
-            marginTop="1rem"
-            padding="0.3rem 1rem"
-            borderRadius="5px"
-            border="1px solid rgba(99, 99, 99, 0.2)"
-            onClick={signInWithGoogle}
+            background="greenX.700"
+            borderRadius={4}
+            py={6}
+            width="100%"
+            fontWeight="500"
+            color="whiteX.600"
+            _hover={{ background: 'greenX.600' }}
+            transition="0.3s"
+            onClick={registerUser}
           >
-            <Icon as={FcGoogle} boxSize="2.5rem" />
+            Cadastrar
           </Button>
-        </Box>
+        </Stack>
         <Button
-          type="submit"
-          marginTop="2rem"
-          display="block"
-          marginX="auto"
-          background="greenX.700"
-          borderRadius="15px"
-          paddingY="0.5rem"
-          width="100%"
-          fontWeight="500"
-          color="whiteX.600"
-          _hover={{ background: 'greenX.600' }}
-          transition="0.3s"
-          onClick={(event) => registerUser(event)}
+          my={4}
+          w="100%"
+          py={6}
+          borderRadius={4}
+          border="1px solid rgba(99, 99, 99, 0.2)"
+          onClick={signInWithGoogle}
         >
-          Cadastrar
+          <Icon as={FcGoogle} boxSize="1.5rem" />
+          &nbsp;Entrar com o Google
         </Button>
+
+        <Text textAlign="center">
+          Já possui uma conta?
+          <ChakraLink as={Link} to="/entrar" color="greenX.700">
+            &nbsp;Clique aqui
+          </ChakraLink>
+        </Text>
       </Box>
     </Layout>
   );

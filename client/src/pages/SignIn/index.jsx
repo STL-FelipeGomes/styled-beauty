@@ -56,9 +56,13 @@ const Login = () => {
       await signIn({ token: user.accessToken });
       localStorage.setItem('token', user.accessToken);
 
-      navigate('/');
-    } catch (error) {
-      warning('Informações inválidas!');
+      return navigate('/');
+    } catch ({ code }) {
+      if (code === 'auth/invalid-email') {
+        return warning('Endereço de e-mail inválido!');
+      }
+
+      return warning('Informações inválidas!');
     }
   };
 
@@ -76,7 +80,7 @@ const Login = () => {
 
       localStorage.setItem('token', accessToken);
 
-      return navigate('/home');
+      return navigate('/');
     } catch (error) {}
   };
 
@@ -87,7 +91,6 @@ const Login = () => {
       alignItems="center"
       flexDirection="column"
       height="100vh"
-      width="100%"
       gap="2rem"
     >
       <Box
@@ -105,7 +108,7 @@ const Login = () => {
             Faça seu login
           </Heading>
 
-          <Input ref={emailRef} type="email" placeholder="Email" />
+          <Input ref={emailRef} type="email" placeholder="E-mail" />
           <InputGroup>
             <Input
               type={showPassword ? 'text' : 'password'}
@@ -152,12 +155,9 @@ const Login = () => {
         <Text textAlign="center">
           Não possui uma conta ainda?&nbsp;
           <ChakraLink as={Link} to="/cadastrar" color="greenX.700">
-            Cadastre-se
+            Clique aqui
           </ChakraLink>
         </Text>
-        <ChakraLink as={Link} to="#" color="greenX.700">
-          Esqueci minha senha
-        </ChakraLink>
       </Box>
     </Layout>
   );
