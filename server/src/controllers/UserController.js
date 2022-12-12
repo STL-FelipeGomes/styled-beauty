@@ -2,21 +2,34 @@ const { db, auth } = require('../firebase');
 
 module.exports = {
   async signUp(req, res) {
-    const { fullName, email, birthDate } = req.body;
+    const { id, fullName, birthDate } = req.body;
+
+    let email = '';
 
     const errors = [];
 
-    if (!fullName) {
-      errors.push({ error: { message: 'User full name is required.' } });
-    }
-
-    if (!email) {
-      errors.push({ error: { message: 'User email is required.' } });
+    if (!id) {
+      errors.push({
+        error: { message: 'User ID is required.' },
+      });
     } else {
       try {
-        await auth.getUserByEmail(email);
+        const authUser = await auth.getUser(id);
+        email = authUser.email;
+      } catch (error) {
+        errors.push({ error: { message: 'User not found.' } });
+      }
+
+      const userRef = db.collection('users').doc(id);
+      const user = await userRef.get();
+
+      if (user.exists) {
         errors.push({ error: { message: 'User already exists.' } });
-      } catch (error) {}
+      }
+    }
+
+    if (!fullName) {
+      errors.push({ error: { message: 'User full name is required.' } });
     }
 
     if (!birthDate) {
@@ -29,13 +42,12 @@ module.exports = {
 
     const newUser = {
       fullName,
-      email,
       birthDate,
     };
 
-    const { id } = await db.collection('users').add(newUser);
+    await db.collection('users').doc(id).set(newUser);
 
-    return res.status(201).json({ id, ...newUser });
+    return res.status(201).json({ id, email, ...newUser });
   },
   async signIn(req, res) {
     const { token } = req.body;

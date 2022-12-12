@@ -5,6 +5,9 @@ module.exports = {
     const estabRef = db.collection('establishments');
     const estabSnapshot = await estabRef.get();
 
+    const usersRef = db.collection('users');
+    const userSnapshot = await usersRef.get();
+
     const estabOwnerRef = db.collection('establishmentOwners');
     const estabOwnerSnapshot = await estabOwnerRef.get();
 
@@ -13,19 +16,31 @@ module.exports = {
       estabs.push({ id: estab.id, ...estab.data() });
     });
 
+    const users = [];
+    userSnapshot.forEach((user) => {
+      const { fullName } = user.data();
+      users.push({ id: user.id, fullName });
+    });
+
     const estabOwners = [];
     estabOwnerSnapshot.forEach((estabOwner) => {
       estabOwners.push({ ...estabOwner.data() });
     });
 
     const filterdEstabs = estabs.map((estab) => {
-      const ownerIds = estabOwners
-        .map(({ establishmentId, ownerId }) =>
-          establishmentId === estab.id ? ownerId : null
-        )
-        .filter((ownerId) => ownerId);
+      const owners = estabOwners
+        .map(({ establishmentId, ownerId }) => {
+          if (establishmentId !== estab.id) {
+            return null;
+          }
 
-      return { ...estab, ownerIds };
+          const filteredOwners = users.filter((user) => user.id === ownerId);
+
+          return filteredOwners;
+        })
+        .filter((owner) => owner);
+
+      return { ...estab, owners };
     });
 
     return res.json(filterdEstabs);
@@ -42,24 +57,38 @@ module.exports = {
         .json({ error: { message: 'Establishment not found.' } });
     }
 
+    const usersRef = db.collection('users');
+    const userSnapshot = await usersRef.get();
+
+    const users = [];
+    userSnapshot.forEach((user) => {
+      const { fullName } = user.data();
+      users.push({ id: user.id, fullName });
+    });
+
     const estabOwnerRef = db.collection('establishmentOwners');
     const estabOwnerSnapshot = await estabOwnerRef
       .where('establishmentId', '==', id)
       .get();
 
-    const ownerIds = [];
+    const owners = [];
     estabOwnerSnapshot.forEach((estabOwner) => {
       const { ownerId } = estabOwner.data();
-      ownerIds.push(ownerId);
+
+      const user = users.find((user) => user.id === ownerId);
+      owners.push(user);
     });
 
-    return res.json({ id, ...estabSnapshot.data(), ownerIds });
+    return res.json({ id, ...estabSnapshot.data(), owners });
   },
   async list(req, res) {
     const { user_id } = req.params;
 
     const estabRef = db.collection('establishments');
     const estabSnapshot = await estabRef.get();
+
+    const usersRef = db.collection('users');
+    const userSnapshot = await usersRef.get();
 
     const estabOwnerRef = db.collection('establishmentOwners');
     const estabOwnerSnapshot = await estabOwnerRef
@@ -71,6 +100,12 @@ module.exports = {
       estabs.push({ id: estab.id, ...estab.data() });
     });
 
+    const users = [];
+    userSnapshot.forEach((user) => {
+      const { fullName } = user.data();
+      users.push({ id: user.id, fullName });
+    });
+
     const estabOwners = [];
     estabOwnerSnapshot.forEach((estabOwner) => {
       estabOwners.push({ ...estabOwner.data() });
@@ -78,15 +113,21 @@ module.exports = {
 
     const filterdEstabs = estabs
       .map((estab) => {
-        const ownerIds = estabOwners
-          .map(({ establishmentId, ownerId }) =>
-            establishmentId === estab.id ? ownerId : null
-          )
-          .filter((ownerId) => ownerId);
+        const owners = estabOwners
+          .map(({ establishmentId, ownerId }) => {
+            if (establishmentId !== estab.id) {
+              return null;
+            }
 
-        return { ...estab, ownerIds };
+            const filteredOwners = users.filter((user) => user.id === ownerId);
+
+            return filteredOwners;
+          })
+          .filter((owner) => owner);
+
+        return { ...estab, owners };
       })
-      .filter((estab) => estab.ownerIds.length);
+      .filter((estab) => estab.owners.length);
 
     return res.json(filterdEstabs);
   },
@@ -183,13 +224,18 @@ module.exports = {
       serviceIds: [],
     };
 
-    const { id } = await db.collection('establishments').add(newEstab);
+    const userRef = db.collection('users').doc(user_id);
+    const user = await userRef.get();
+    const { fullName } = user.data();
 
+    const { id } = await db.collection('establishments').add(newEstab);
     const newEstabOwner = { establishmentId: id, ownerId: user_id };
 
     await db.collection('establishmentOwners').add(newEstabOwner);
 
-    return res.status(201).json({ id, ...newEstab, ownerIds: [user_id] });
+    return res
+      .status(201)
+      .json({ id, ...newEstab, owners: [{ id: user_id, fullName }] });
   },
   async update(req, res) {
     const { name, logo, address, images, categoryIds, serviceIds } = req.body;
