@@ -13,7 +13,7 @@ import { AiFillHeart, AiFillStar, AiOutlineHeart } from 'react-icons/ai';
 import { HiUser } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 
-const CardPreview = ({
+const PreviewCard = ({
   image,
   nameInstitution,
   evaluation,
@@ -29,7 +29,7 @@ const CardPreview = ({
         alignItems="flex-start"
         justifyContent="space-between"
       >
-        <Flex as={Link} to={`/loja/${id}`} alignItems="center" maxWidth="100%">
+        <Flex as={Link} to={`/lojas/${id}`} alignItems="center" maxWidth="100%">
           <Avatar src={image} boxSize="3.5rem" name={nameInstitution} />
           <Box marginLeft="0.5rem" width="13rem" fontSize="0.8rem">
             <Flex as="p" fontSize="1rem" fontWeight="500">
@@ -65,4 +65,4 @@ const CardPreview = ({
   );
 };
 
-export default CardPreview;
+export default PreviewCard;

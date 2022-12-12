@@ -6,16 +6,17 @@ import {
   Icon,
   InputGroup,
   InputRightElement,
+  Link as ChakraLink,
   Text,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
-import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri';
+import { SlArrowDown, SlArrowUp } from 'react-icons/sl';
 import { Link } from 'react-router-dom';
 
-import CardPreview from '../../components/PreviewCard';
 import Input from '../../components/Input';
 import Layout from '../../components/Layout';
+import PreviewCard from '../../components/PreviewCard';
 import { index } from '../../services/api';
 
 const Home = () => {
@@ -34,18 +35,27 @@ const Home = () => {
 
   return (
     <Layout>
-      <Flex alignItems="center" marginBottom="1rem">
-        <Button as={Link} to="/cadastrar-loja" variant="unstyled">
-          <PlusSquareIcon fontSize="1.5rem" color="greenX.700" />
-        </Button>
+      <Flex alignItems="center" mb={4} gap={2} w="100%">
+        <ChakraLink
+          as={Link}
+          to="/lojas/cadastrar"
+          variant="unstyled"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          color="greenX.700"
+          _hover={{ color: 'greenX.600' }}
+        >
+          <PlusSquareIcon fontSize="1.5rem" />
+        </ChakraLink>
         <InputGroup>
-          <Input type="text" placeholder="Estabelecimento ou serviço" />
-          <InputRightElement>
-            <Search2Icon
-              fontWeight="500"
-              marginRight="1.5rem"
-              color="greenX.700"
-            />
+          <Input
+            type="text"
+            placeholder="Estabelecimento ou serviço"
+            width="100%"
+          />
+          <InputRightElement h={50} pr={4}>
+            <Search2Icon fontWeight="500" color="greenX.700" />
           </InputRightElement>
         </InputGroup>
       </Flex>
@@ -79,16 +89,11 @@ const Home = () => {
           Serviços
         </Button>
       </Flex>
-      <Flex
-        marginTop="0.5rem"
-        alignItems="center"
-        justifyContent="space-between"
-      >
+      <Flex marginTop="0.5rem" alignItems="center" gap={2}>
         <Button
           variant="unstyled"
-          height="auto"
           fontSize="0.9rem"
-          padding="0.2rem 0.5rem"
+          p={2}
           borderRadius="full"
           border="1px solid"
           borderColor="blackX.400"
@@ -98,16 +103,12 @@ const Home = () => {
           onClick={() => setOrder(!order)}
         >
           <Text>Ordenar</Text>
-          <Icon
-            as={order ? RiArrowDropDownLine : RiArrowDropUpLine}
-            boxSize="1.2rem"
-          />
+          <Icon as={order ? SlArrowDown : SlArrowUp} boxSize="1rem" ml={1} />
         </Button>
         <Button
           variant="unstyled"
-          height="auto"
           fontSize="0.9rem"
-          padding="0.2rem 0.5rem"
+          p={2}
           borderRadius="full"
           border="1px solid"
           borderColor="blackX.400"
@@ -117,16 +118,12 @@ const Home = () => {
           onClick={() => setDistance(!distance)}
         >
           <Text>Distância</Text>
-          <Icon
-            as={distance ? RiArrowDropDownLine : RiArrowDropUpLine}
-            boxSize="1.2rem"
-          />
+          <Icon as={distance ? SlArrowDown : SlArrowUp} boxSize="1rem" ml={1} />
         </Button>
         <Button
           variant="unstyled"
-          height="auto"
           fontSize="0.9rem"
-          padding="0.2rem 0.5rem"
+          p={2}
           borderRadius="full"
           border="1px solid"
           borderColor="blackX.400"
@@ -138,14 +135,15 @@ const Home = () => {
           <Text>Favoritos</Text>
           <Icon
             as={favorite ? AiFillHeart : AiOutlineHeart}
-            boxSize="1.2rem"
+            boxSize="1rem"
             color={favorite ? 'green.700' : 'blackX.500'}
+            ml={1}
           />
         </Button>
       </Flex>
       <Box>
         {stores.map((store) => (
-          <CardPreview
+          <PreviewCard
             key={store.id}
             id={store.id}
             image={store.logo}
