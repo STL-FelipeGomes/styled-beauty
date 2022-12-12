@@ -6,6 +6,7 @@ const EstablishmentController = require('./controllers/EstablishmentController')
 
 router.post('/users/signup', UserController.signUp);
 router.post('/users/signin', UserController.signIn);
+router.post('/users/oauth', UserController.authenticateWithGoogle);
 
 router.get('/establishments', EstablishmentController.index);
 router.get('/establishments/:id', EstablishmentController.show);

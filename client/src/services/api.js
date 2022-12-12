@@ -112,14 +112,14 @@ export const destroy = async ({ id = '' }) => {
   }
 };
 
-export const signUp = async ({ fullName, email, birthDate }) => {
+export const signUp = async ({ id, fullName, birthDate }) => {
   try {
     const request = await axios({
       method: 'post',
       url: `${path}/users/signup/`,
       data: {
+        id,
         fullName,
-        email,
         birthDate,
       },
     });

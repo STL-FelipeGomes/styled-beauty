@@ -1,44 +1,37 @@
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
   Icon,
   InputGroup,
   InputRightElement,
-  Link,
+  Link as ChakraLink,
   Stack,
   useToast,
 } from '@chakra-ui/react';
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { createRef, useState } from 'react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { FaUserCircle } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-import Layout from '../../components/Layout/Layout';
 import Input from '../../components/Input/Input';
+import Layout from '../../components/Layout/Layout';
 import auth, { provider } from '../../database';
-import { signIn } from '../../Request/request';
+import { signIn, signUp } from '../../services/api';
 
 const Login = () => {
   const [show, setShow] = useState(false);
+
   const emailRef = createRef();
   const passwordRef = createRef();
+
   const toast = useToast();
   const navigate = useNavigate();
 
-  const signInGoogle = async () => {
-    try {
-      const sign = await signInWithPopup(auth, provider);
-      localStorage.setItem('token', sign.user.accessToken);
-      navigate('/home');
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const loginUser = async (event) => {
     event.preventDefault();
+
     const { value: email } = emailRef.current;
     const { value: password } = passwordRef.current;
 
@@ -51,13 +44,16 @@ const Login = () => {
         position: 'top',
         background: 'red',
       });
-      return false;
+      return;
     }
 
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
+
       await signIn({ token: user.accessToken });
+
       localStorage.setItem('token', user.accessToken);
+
       navigate('/home');
     } catch (error) {
       toast({
@@ -69,8 +65,26 @@ const Login = () => {
         background: 'red',
       });
     }
+  };
 
-    return true;
+  const signInWithGoogle = async () => {
+    try {
+      const { user } = await signInWithPopup(auth, provider);
+
+      const { uid, displayName, accessToken } = user;
+
+      await signUp({
+        id: uid,
+        fullName: displayName,
+        birthDate: '0000-00-00',
+      });
+
+      localStorage.setItem('token', accessToken);
+
+      return navigate('/home');
+    } catch (error) {
+      return console.log(error);
+    }
   };
 
   return (
@@ -110,7 +124,7 @@ const Login = () => {
             padding="0.3rem 1rem"
             borderRadius="5px"
             border="1px solid rgba(99, 99, 99, 0.2)"
-            onClick={signInGoogle}
+            onClick={signInWithGoogle}
           >
             <Icon as={FcGoogle} boxSize="2.5rem" />
           </Button>
@@ -132,12 +146,12 @@ const Login = () => {
           Entrar
         </Button>
       </Box>
-      <Link href="/cadastrar-se" color="blackX.500">
+      <ChakraLink as={Link} to="/cadastrar-se" color="blackX.500">
         Cadastrar-se
-      </Link>
-      <Link href="/" color="blackX.500">
+      </ChakraLink>
+      <ChakraLink as={Link} to="/" color="blackX.500">
         Esqueci minha senha
-      </Link>
+      </ChakraLink>
     </Layout>
   );
 };

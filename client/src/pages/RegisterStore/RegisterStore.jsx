@@ -1,21 +1,21 @@
+import { ChevronLeftIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
+  Flex,
   Icon,
-  Text,
   Radio,
   RadioGroup,
-  Flex,
   Stack,
+  Text,
   useToast,
 } from '@chakra-ui/react';
 import { createRef, useRef } from 'react';
-import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { FaUserCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import Layout from '../../components/Layout/Layout';
 import Input from '../../components/Input/Input';
-import { signIn, store } from '../../Request/request';
+import Layout from '../../components/Layout/Layout';
+import { signIn, store } from '../../services/api';
 
 const RegisterStore = () => {
   const nameRef = createRef();

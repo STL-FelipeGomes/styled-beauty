@@ -1,18 +1,18 @@
-import { Box, Button, Flex, Icon, Image, Text } from '@chakra-ui/react';
 import { ChevronLeftIcon, EmailIcon, PhoneIcon } from '@chakra-ui/icons';
+import { Box, Button, Flex, Icon, Image, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { MdDescription } from 'react-icons/md';
-import { useParams } from 'react-router-dom';
 import {
   AiFillHeart,
-  AiOutlineHeart,
   AiFillStar,
+  AiOutlineHeart,
   AiOutlineStar,
 } from 'react-icons/ai';
-import { HiUser, HiLocationMarker } from 'react-icons/hi';
 import { FaStoreAlt } from 'react-icons/fa';
+import { HiLocationMarker, HiUser } from 'react-icons/hi';
+import { MdDescription } from 'react-icons/md';
+import { useParams } from 'react-router-dom';
 import Layout from '../../components/Layout/Layout';
-import { show } from '../../Request/request';
+import { show } from '../../services/api';
 
 const Store = () => {
   const [favorite, setFavorite] = useState(false);
