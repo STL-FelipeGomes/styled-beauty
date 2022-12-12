@@ -27,23 +27,18 @@ module.exports = {
       estabOwners.push({ ...estabOwner.data() });
     });
 
-    const filterdEstabs = estabs.map((estab) => {
-      const owners = estabOwners
-        .map(({ establishmentId, ownerId }) => {
-          if (establishmentId !== estab.id) {
-            return null;
-          }
-
-          const filteredOwners = users.filter((user) => user.id === ownerId);
-
-          return filteredOwners;
-        })
-        .filter((owner) => owner);
+    const filteredEstabs = estabs.map((estab) => {
+      let owners;
+      estabOwners.forEach(({ establishmentId, ownerId }) => {
+        if (estab.id === establishmentId) {
+          owners = users.filter((user) => user.id === ownerId);
+        }
+      });
 
       return { ...estab, owners };
     });
 
-    return res.json(filterdEstabs);
+    return res.json(filteredEstabs);
   },
   async show(req, res) {
     const { id } = req.params;
@@ -111,25 +106,20 @@ module.exports = {
       estabOwners.push({ ...estabOwner.data() });
     });
 
-    const filterdEstabs = estabs
+    const filteredEstabs = estabs
       .map((estab) => {
-        const owners = estabOwners
-          .map(({ establishmentId, ownerId }) => {
-            if (establishmentId !== estab.id) {
-              return null;
-            }
-
-            const filteredOwners = users.filter((user) => user.id === ownerId);
-
-            return filteredOwners;
-          })
-          .filter((owner) => owner);
+        let owners;
+        estabOwners.forEach(({ establishmentId, ownerId }) => {
+          if (estab.id === establishmentId) {
+            owners = users.filter((user) => user.id === ownerId);
+          }
+        });
 
         return { ...estab, owners };
       })
-      .filter((estab) => estab.owners.length);
+      .filter((estab) => estab.owners?.length);
 
-    return res.json(filterdEstabs);
+    return res.json(filteredEstabs);
   },
   async store(req, res) {
     const {
