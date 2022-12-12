@@ -10,19 +10,26 @@ import {
 import { FaStoreAlt } from 'react-icons/fa';
 import { HiLocationMarker, HiUser } from 'react-icons/hi';
 import { MdDescription } from 'react-icons/md';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+
 import Layout from '../../components/Layout/Layout';
 import { show } from '../../services/api';
 
 const Store = () => {
   const [favorite, setFavorite] = useState(false);
   const [store, setStore] = useState([]);
+  const [ownerName, setOwnerName] = useState('');
 
   const { id } = useParams();
 
   useEffect(() => {
     (async () => {
       const { data } = await show({ id });
+
+      const ownerFullName = data.owners[0].fullName;
+      const fullNameParts = ownerFullName.split(' ');
+      setOwnerName(`${fullNameParts[0] ?? ''} ${fullNameParts[1] ?? ''}`);
+
       setStore(data);
     })();
   }, []);
@@ -44,10 +51,7 @@ const Store = () => {
   return (
     <Layout>
       <Flex justifyContent="space-between">
-        <Button
-          variant="unstyled"
-          onClick={() => (window.location.href = '/home')}
-        >
+        <Button as={Link} to="/home" variant="unstyled">
           <ChevronLeftIcon fontSize="1.5rem" color="greenX.700" />
         </Button>
         <Button
@@ -91,7 +95,7 @@ const Store = () => {
         </Flex>
         <Text marginTop="0.5rem" display="flex" alignItems="center">
           <Icon as={HiUser} marginRight="5px" color="greenX.700" />
-          Leila
+          {ownerName}
         </Text>
         <Text marginTop="0.5rem" display="flex" alignItems="center">
           <Icon as={HiLocationMarker} marginRight="5px" color="greenX.700" />

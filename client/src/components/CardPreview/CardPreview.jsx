@@ -2,15 +2,16 @@ import {
   Avatar,
   Box,
   Button,
-  Flex,
-  Icon,
   Card,
   CardBody,
+  Flex,
+  Icon,
   Text,
 } from '@chakra-ui/react';
 
-import { AiFillHeart, AiOutlineHeart, AiFillStar } from 'react-icons/ai';
+import { AiFillHeart, AiFillStar, AiOutlineHeart } from 'react-icons/ai';
 import { HiUser } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
 
 const CardPreview = ({
   image,
@@ -28,7 +29,7 @@ const CardPreview = ({
         alignItems="flex-start"
         justifyContent="space-between"
       >
-        <Flex as="a" href={`/loja/${id}`} alignItems="center" maxWidth="100%">
+        <Flex as={Link} to={`/loja/${id}`} alignItems="center" maxWidth="100%">
           <Avatar src={image} boxSize="3.5rem" name={nameInstitution} />
           <Box marginLeft="0.5rem" width="13rem" fontSize="0.8rem">
             <Flex as="p" fontSize="1rem" fontWeight="500">

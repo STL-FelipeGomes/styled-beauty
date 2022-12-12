@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { createRef, useRef } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../components/Input/Input';
 import Layout from '../../components/Layout/Layout';
 import { signIn, store } from '../../services/api';
@@ -94,10 +94,7 @@ const RegisterStore = () => {
   return (
     <Box>
       <Box padding="1rem 0 0 1rem">
-        <Button
-          variant="unstyled"
-          onClick={() => (window.location.href = '/home')}
-        >
+        <Button as={Link} to="/home" variant="unstyled">
           <ChevronLeftIcon fontSize="1.5rem" color="greenX.700" />
         </Button>
       </Box>
