@@ -113,7 +113,7 @@ const RegisterStore = () => {
       });
 
       const storeId = newStore.data.id;
-      return navigate(`/loja/${storeId}`);
+      return navigate(`/lojas/${storeId}`);
     } catch (error) {}
   };
 
